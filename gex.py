@@ -335,54 +335,6 @@ def create_chart3(df, today_date, spot_price):
     
     return fig, zero_gamma
 
-def create_chart4(dfAgg, strikes, spot_price):
-    """Cria o gráfico 4: Total Delta por Strike"""
-    from_strike = 0.8 * spot_price
-    to_strike = 1.2 * spot_price
-    
-    fig = go.Figure()
-    fig.add_bar(
-        x=strikes, 
-        y=dfAgg['CallDelta'].to_numpy(), 
-        width=0.35, 
-        name="Call Delta",
-        marker_color='rgb(0, 100, 200)'
-    )
-    fig.add_bar(
-        x=strikes, 
-        y=dfAgg['PutDelta'].to_numpy(), 
-        width=0.35, 
-        name="Put Delta",
-        marker_color='rgb(200, 50, 50)'
-    )
-    
-    fig.update_xaxes(range=[from_strike, to_strike])
-    
-    fig.update_layout(
-        title_text="Total Delta por Strike",
-        title_font=dict(size=20, family="Arial Black"),
-        xaxis_title="Strike",
-        yaxis_title="Delta Total",
-        plot_bgcolor='white',
-        font=dict(family='Arial', size=12, color='black'),
-        height=700,
-        hovermode='x unified',
-        barmode='group'
-    )
-    
-    fig.add_shape(
-        dict(
-            type="line",
-            x0=spot_price,
-            y0=min(dfAgg['PutDelta'].to_numpy()),
-            x1=spot_price,
-            y1=max(dfAgg['CallDelta'].to_numpy()),
-            line=dict(color="red", width=2, dash='dash'),
-        )
-    )
-    
-    return fig
-
 def create_chart5(dfAgg, strikes, spot_price):
     """Cria o gráfico 5: Total Open Interest por Strike"""
     from_strike = 0.8 * spot_price
@@ -527,10 +479,6 @@ if uploaded_file is not None:
         
         st.plotly_chart(fig3, use_container_width=True)
         
-        # Gráfico 4
-        st.subheader("📊 Gráfico 4: Total Delta por Strike")
-        fig4 = create_chart4(dfAgg_filtered, strikes_filtered, spot_price)
-        st.plotly_chart(fig4, use_container_width=True)
         
         # Gráfico 5
         st.subheader("📊 Gráfico 5: Total Open Interest por Strike")
