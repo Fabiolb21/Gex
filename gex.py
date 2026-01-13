@@ -488,8 +488,17 @@ if uploaded_file is not None:
         # Informações adicionais
         st.divider()
         st.subheader("📈 Informações Adicionais")
+
+        # Calcular Put Call Ratio
+        total_call_oi = dfAgg_filtered['CallOpenInt'].sum()
+        total_put_oi = dfAgg_filtered['PutOpenInt'].sum()
         
-        col1, col2, col3 = st.columns(3)
+        if total_call_oi > 0:
+            put_call_ratio = total_put_oi / total_call_oi
+        else:
+            put_call_ratio = 0
+        
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             st.metric("Gamma Flip Point", f"${zero_gamma:,.2f}")
@@ -501,6 +510,9 @@ if uploaded_file is not None:
         with col3:
             call_gex = dfAgg_filtered['CallGEX'].sum() / 10**9
             st.metric("Call GEX Total", f"${call_gex:,.2f}B")
+            
+        with col4:
+            st.metric("Put/Call Ratio", f"{put_call_ratio:.2f}")
         
         # Tabela de dados
         st.subheader("📋 Dados por Strike")
